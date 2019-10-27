@@ -2,25 +2,30 @@
 using Mangau.WillNeedUmbrella.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Mangau.WillNeedUmbrella.Infrastructure.MySql.Migrations
+namespace Mangau.WillNeedUmbrella.Infrastructure.SqlServer.Migrations
 {
     [DbContext(typeof(WnuContext))]
-    partial class WnuContextModelSnapshot : ModelSnapshot
+    [Migration("20191027183035_GroupsPermissions")]
+    partial class GroupsPermissions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.0.0")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.Group", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("Active")
                         .ValueGeneratedOnAdd()
@@ -29,12 +34,12 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.MySql.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(64)")
+                        .HasColumnType("nvarchar(64)")
                         .HasMaxLength(64);
 
                     b.HasKey("Id");
@@ -79,7 +84,8 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.MySql.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("Active")
                         .ValueGeneratedOnAdd()
@@ -88,12 +94,12 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.MySql.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(64)")
+                        .HasColumnType("nvarchar(64)")
                         .HasMaxLength(64);
 
                     b.Property<long>("PermissionCategoryId")
@@ -113,7 +119,8 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.MySql.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("Active")
                         .ValueGeneratedOnAdd()
@@ -122,12 +129,12 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.MySql.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(64)")
+                        .HasColumnType("nvarchar(64)")
                         .HasMaxLength(64);
 
                     b.HasKey("Id");
@@ -142,7 +149,8 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.MySql.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("Active")
                         .ValueGeneratedOnAdd()
@@ -151,17 +159,17 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.MySql.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("varchar(128)")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("varchar(128)")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("varchar(128)")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<bool>("Recover")
@@ -171,7 +179,7 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.MySql.Migrations
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("varchar(64)")
+                        .HasColumnType("nvarchar(64)")
                         .HasMaxLength(64);
 
                     b.HasKey("Id");

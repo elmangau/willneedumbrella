@@ -2,39 +2,40 @@
 using Mangau.WillNeedUmbrella.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Mangau.WillNeedUmbrella.Infrastructure.MySql.Migrations
+namespace Mangau.WillNeedUmbrella.Infrastructure.SqLite.Migrations
 {
     [DbContext(typeof(WnuContext))]
-    partial class WnuContextModelSnapshot : ModelSnapshot
+    [Migration("20191027183017_GroupsPermissions")]
+    partial class GroupsPermissions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.0.0")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("ProductVersion", "3.0.0");
 
             modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.Group", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("Active")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(true);
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(64)")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(64);
 
                     b.HasKey("Id");
@@ -48,10 +49,10 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.MySql.Migrations
             modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.GroupPermission", b =>
                 {
                     b.Property<long>("GroupId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<long>("PermissionId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("GroupId", "PermissionId");
 
@@ -63,10 +64,10 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.MySql.Migrations
             modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.GroupUser", b =>
                 {
                     b.Property<long>("GroupId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("GroupId", "UserId");
 
@@ -79,25 +80,25 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.MySql.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("Active")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(true);
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(64)")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(64);
 
                     b.Property<long>("PermissionCategoryId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -113,21 +114,21 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.MySql.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("Active")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(true);
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(64)")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(64);
 
                     b.HasKey("Id");
@@ -142,36 +143,36 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.MySql.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("Active")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("varchar(128)")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(128);
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("varchar(128)")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(128);
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("varchar(128)")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(128);
 
                     b.Property<bool>("Recover")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("varchar(64)")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(64);
 
                     b.HasKey("Id");

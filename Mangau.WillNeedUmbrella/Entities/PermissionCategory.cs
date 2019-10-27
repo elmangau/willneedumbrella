@@ -5,8 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mangau.WillNeedUmbrella.Entities
 {
-    [Table("secgroup")]
-    public class Group
+    [Table("secpermissioncategory")]
+    public class PermissionCategory
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -23,8 +23,6 @@ namespace Mangau.WillNeedUmbrella.Entities
         [Required]
         public bool Active { get; set; }
 
-        public virtual IList<GroupUser> GroupsUsers { get; set; }
-
-        public virtual IList<GroupPermission> GroupsPermissions { get; set; }
+        public virtual IList<Permission> Permissions { get; set; }
     }
 }

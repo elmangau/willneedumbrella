@@ -14,6 +14,12 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
 
         public DbSet<GroupUser> GroupsUsers { get; set; }
 
+        public DbSet<PermissionCategory> PermissionCategories { get; set; }
+
+        public DbSet<Permission> Permissions { get; set; }
+
+        public DbSet<GroupPermission> GroupsPermissions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var userMB = modelBuilder.Entity<User>();
@@ -52,6 +58,38 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
                 .HasOne(gu => gu.User)
                 .WithMany(g => g.GroupsUsers)
                 .HasForeignKey(g => g.UserId);
+
+            var percatMB = modelBuilder.Entity<PermissionCategory>();
+            percatMB
+                .Property(u => u.Active)
+                .HasDefaultValue(true);
+            percatMB
+                .HasIndex(u => u.Name)
+                .IsUnique(true);
+
+            var perMB = modelBuilder.Entity<Permission>();
+            perMB
+                .Property(u => u.Active)
+                .HasDefaultValue(true);
+            perMB
+                .HasIndex(u => u.Name)
+                .IsUnique(true);
+            perMB
+                .HasOne(p => p.PermissionCategory)
+                .WithMany(pc => pc.Permissions)
+                .HasForeignKey(p => p.PermissionCategoryId);
+
+            var groupsPersMB = modelBuilder.Entity<GroupPermission>();
+            groupsPersMB
+                .HasKey(gp => new { gp.GroupId, gp.PermissionId });
+            groupsPersMB
+                .HasOne(gp => gp.Group)
+                .WithMany(g => g.GroupsPermissions)
+                .HasForeignKey(g => g.GroupId);
+            groupsPersMB
+                .HasOne(gp => gp.Permission)
+                .WithMany(g => g.GroupsPermissions)
+                .HasForeignKey(g => g.PermissionId);
         }
     }
 }

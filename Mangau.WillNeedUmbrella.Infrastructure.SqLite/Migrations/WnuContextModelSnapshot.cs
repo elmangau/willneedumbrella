@@ -44,6 +44,21 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.SqLite.Migrations
                     b.ToTable("secgroup");
                 });
 
+            modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.GroupPermission", b =>
+                {
+                    b.Property<long>("GroupId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("PermissionId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("GroupId", "PermissionId");
+
+                    b.HasIndex("PermissionId");
+
+                    b.ToTable("secgrouppermission");
+                });
+
             modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.GroupUser", b =>
                 {
                     b.Property<long>("GroupId")
@@ -57,6 +72,69 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.SqLite.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("secgroupuser");
+                });
+
+            modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.Permission", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Active")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
+                    b.Property<long>("PermissionCategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("PermissionCategoryId");
+
+                    b.ToTable("secpermission");
+                });
+
+            modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.PermissionCategory", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Active")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("secpermissioncategory");
                 });
 
             modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.User", b =>
@@ -106,6 +184,21 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.SqLite.Migrations
                     b.ToTable("secuser");
                 });
 
+            modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.GroupPermission", b =>
+                {
+                    b.HasOne("Mangau.WillNeedUmbrella.Entities.Group", "Group")
+                        .WithMany("GroupsPermissions")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Mangau.WillNeedUmbrella.Entities.Permission", "Permission")
+                        .WithMany("GroupsPermissions")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.GroupUser", b =>
                 {
                     b.HasOne("Mangau.WillNeedUmbrella.Entities.Group", "Group")
@@ -117,6 +210,15 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.SqLite.Migrations
                     b.HasOne("Mangau.WillNeedUmbrella.Entities.User", "User")
                         .WithMany("GroupsUsers")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.Permission", b =>
+                {
+                    b.HasOne("Mangau.WillNeedUmbrella.Entities.PermissionCategory", "PermissionCategory")
+                        .WithMany("Permissions")
+                        .HasForeignKey("PermissionCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
