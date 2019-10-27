@@ -1,3 +1,4 @@
+using Mangau.WillNeedUmbrella.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,16 +11,29 @@ namespace Mangau.WillNeedUmbrella.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddXmlFile("appsettings.config", optional: false, reloadOnChange: true)
+                .AddXmlFile("appsettings.mocks.config", optional: true, reloadOnChange: true)
+                .AddXmlFile($"appsettings.{env.EnvironmentName}.config", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
 
+        private void SetSettings(IWebHostEnvironment env)
+        {
+
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAppSettings(Configuration);
 
             services.AddControllersWithViews();
 
