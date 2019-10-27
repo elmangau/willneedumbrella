@@ -3,14 +3,16 @@ using Mangau.WillNeedUmbrella.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Mangau.WillNeedUmbrella.Infrastructure.SqlServer.Migrations
 {
     [DbContext(typeof(WnuContext))]
-    partial class WnuContextModelSnapshot : ModelSnapshot
+    [Migration("20191027175341_GroupsUsers")]
+    partial class GroupsUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
