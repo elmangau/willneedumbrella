@@ -3,7 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mangau.WillNeedUmbrella.Web", "Mangau.WillNeedUmbrella.Web\Mangau.WillNeedUmbrella.Web.csproj", "{45160537-E036-4D0B-8321-6A92ABDEFDDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mangau.WillNeedUmbrella.Web", "Mangau.WillNeedUmbrella.Web\Mangau.WillNeedUmbrella.Web.csproj", "{45160537-E036-4D0B-8321-6A92ABDEFDDF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mangau.WillNeedUmbrella", "Mangau.WillNeedUmbrella\Mangau.WillNeedUmbrella.csproj", "{8617C0F2-B5C0-49C5-9D65-6B47A35A7B66}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mangau.WillNeedUmbrella.Infrastructure", "Mangau.WillNeedUmbrella.Infrastructure\Mangau.WillNeedUmbrella.Infrastructure.csproj", "{2D8D9E8D-9744-49F1-9707-5861ECDE2084}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mangau.WillNeedUmbrella.Infrastructure.MySql", "Mangau.WillNeedUmbrella.Infrastructure.MySql\Mangau.WillNeedUmbrella.Infrastructure.MySql.csproj", "{4EFF472E-D8FA-401A-A730-370BE4D76834}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mangau.WillNeedUmbrella.Infrastructure.SqLite", "Mangau.WillNeedUmbrella.Infrastructure.SqLite\Mangau.WillNeedUmbrella.Infrastructure.SqLite.csproj", "{2E11AB1F-3341-46EC-A275-CF922EEAB74F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mangau.WillNeedUmbrella.Infrastructure.SqlServer", "Mangau.WillNeedUmbrella.Infrastructure.SqlServer\Mangau.WillNeedUmbrella.Infrastructure.SqlServer.csproj", "{FCB815E7-CDCD-44B0-A642-404A13C3F038}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DB Providers", "DB Providers", "{8150310B-E4DE-49DF-AE19-489232A8F0F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +27,34 @@ Global
 		{45160537-E036-4D0B-8321-6A92ABDEFDDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45160537-E036-4D0B-8321-6A92ABDEFDDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45160537-E036-4D0B-8321-6A92ABDEFDDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8617C0F2-B5C0-49C5-9D65-6B47A35A7B66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8617C0F2-B5C0-49C5-9D65-6B47A35A7B66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8617C0F2-B5C0-49C5-9D65-6B47A35A7B66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8617C0F2-B5C0-49C5-9D65-6B47A35A7B66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D8D9E8D-9744-49F1-9707-5861ECDE2084}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D8D9E8D-9744-49F1-9707-5861ECDE2084}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D8D9E8D-9744-49F1-9707-5861ECDE2084}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D8D9E8D-9744-49F1-9707-5861ECDE2084}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EFF472E-D8FA-401A-A730-370BE4D76834}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EFF472E-D8FA-401A-A730-370BE4D76834}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EFF472E-D8FA-401A-A730-370BE4D76834}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EFF472E-D8FA-401A-A730-370BE4D76834}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E11AB1F-3341-46EC-A275-CF922EEAB74F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E11AB1F-3341-46EC-A275-CF922EEAB74F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E11AB1F-3341-46EC-A275-CF922EEAB74F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E11AB1F-3341-46EC-A275-CF922EEAB74F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCB815E7-CDCD-44B0-A642-404A13C3F038}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCB815E7-CDCD-44B0-A642-404A13C3F038}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCB815E7-CDCD-44B0-A642-404A13C3F038}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCB815E7-CDCD-44B0-A642-404A13C3F038}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4EFF472E-D8FA-401A-A730-370BE4D76834} = {8150310B-E4DE-49DF-AE19-489232A8F0F1}
+		{2E11AB1F-3341-46EC-A275-CF922EEAB74F} = {8150310B-E4DE-49DF-AE19-489232A8F0F1}
+		{FCB815E7-CDCD-44B0-A642-404A13C3F038} = {8150310B-E4DE-49DF-AE19-489232A8F0F1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F4BA1DA2-8871-48F0-9F21-9EF303B9346E}
