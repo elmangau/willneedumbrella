@@ -3,14 +3,16 @@ using Mangau.WillNeedUmbrella.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Mangau.WillNeedUmbrella.Infrastructure.SqlServer.Migrations
 {
     [DbContext(typeof(WnuContext))]
-    partial class WnuContextModelSnapshot : ModelSnapshot
+    [Migration("20191027200319_InitGroupsUsers")]
+    partial class InitGroupsUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,23 +79,6 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.SqlServer.Migrations
                     b.HasIndex("PermissionId");
 
                     b.ToTable("secgrouppermission");
-
-                    b.HasData(
-                        new
-                        {
-                            GroupId = 1L,
-                            PermissionId = 1L
-                        },
-                        new
-                        {
-                            GroupId = 2L,
-                            PermissionId = 1L
-                        },
-                        new
-                        {
-                            GroupId = 2L,
-                            PermissionId = 2L
-                        });
                 });
 
             modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.GroupUser", b =>
@@ -161,24 +146,6 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.SqlServer.Migrations
                     b.HasIndex("PermissionCategoryId");
 
                     b.ToTable("secpermission");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Active = false,
-                            Description = "The user can Login in the System",
-                            Name = "Users.Login",
-                            PermissionCategoryId = 1L
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Active = false,
-                            Description = "The user can add other users to the System",
-                            Name = "Users.AddUser",
-                            PermissionCategoryId = 1L
-                        });
                 });
 
             modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.PermissionCategory", b =>
@@ -209,22 +176,6 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.SqlServer.Migrations
                         .IsUnique();
 
                     b.ToTable("secpermissioncategory");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Active = false,
-                            Description = "User Management Permissions",
-                            Name = "Users"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Active = false,
-                            Description = "System Management Permissions",
-                            Name = "System"
-                        });
                 });
 
             modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.User", b =>

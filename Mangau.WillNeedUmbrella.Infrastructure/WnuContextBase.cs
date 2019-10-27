@@ -38,6 +38,11 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
             userMB
                 .HasIndex(u => u.LastName)
                 .IsUnique(false);
+            userMB
+                .HasData(
+                    new User { Id = 1, Active = true, UserName = "administrator", Password = "$2y$10$nLgfDdhTjYdUH6wbEctoLe0Ua6yjzx8YCksWZ/aaVGLpAb0hmtddG", FirstName = "System", LastName = "Administrator" },
+                    new User { Id = 2, Active = true, UserName = "test01", Password = "$2y$10$qrGKsfUDysr7fR18ZWlkxOYWMg6D.Of3CeCUzZLGC27xS4VV4AzqW", FirstName = "Test", LastName = "01" }
+                    );
 
             var groupMB = modelBuilder.Entity<Group>();
             groupMB
@@ -46,6 +51,11 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
             groupMB
                 .HasIndex(u => u.Name)
                 .IsUnique(true);
+            groupMB
+                .HasData(
+                    new Group { Id = 1, Active = true, Name = "Everyone", Description = "Everyone" },
+                    new Group { Id = 2, Active = true, Name = "Administrators", Description = "System Administrators" }
+                );
 
             var groupsUsersMB = modelBuilder.Entity<GroupUser>();
             groupsUsersMB
@@ -58,6 +68,12 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
                 .HasOne(gu => gu.User)
                 .WithMany(g => g.GroupsUsers)
                 .HasForeignKey(g => g.UserId);
+            groupsUsersMB
+                .HasData(
+                    new GroupUser { GroupId = 1, UserId = 1 },
+                    new GroupUser { GroupId = 1, UserId = 2 },
+                    new GroupUser { GroupId = 2, UserId = 1 }
+                );
 
             var percatMB = modelBuilder.Entity<PermissionCategory>();
             percatMB
@@ -66,6 +82,11 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
             percatMB
                 .HasIndex(u => u.Name)
                 .IsUnique(true);
+            percatMB
+                .HasData(
+                    new PermissionCategory { Id = 1, Name = "Users", Description = "User Management Permissions"},
+                    new PermissionCategory { Id = 2, Name = "System", Description = "System Management Permissions" }
+                );
 
             var perMB = modelBuilder.Entity<Permission>();
             perMB
@@ -78,6 +99,11 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
                 .HasOne(p => p.PermissionCategory)
                 .WithMany(pc => pc.Permissions)
                 .HasForeignKey(p => p.PermissionCategoryId);
+            perMB
+                .HasData(
+                    new Permission { Id = 1, Name = "Users.Login", Description = "The user can Login in the System", PermissionCategoryId = 1 },
+                    new Permission { Id = 2, Name = "Users.AddUser", Description = "The user can add other users to the System", PermissionCategoryId = 1 }
+                );
 
             var groupsPersMB = modelBuilder.Entity<GroupPermission>();
             groupsPersMB
@@ -90,6 +116,12 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
                 .HasOne(gp => gp.Permission)
                 .WithMany(g => g.GroupsPermissions)
                 .HasForeignKey(g => g.PermissionId);
+            groupsPersMB
+                .HasData(
+                    new GroupPermission { GroupId = 1, PermissionId = 1},
+                    new GroupPermission { GroupId = 2, PermissionId = 1 },
+                    new GroupPermission { GroupId = 2, PermissionId = 2 }
+                );
         }
     }
 }

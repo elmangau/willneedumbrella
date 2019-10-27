@@ -42,6 +42,22 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.SqLite.Migrations
                         .IsUnique();
 
                     b.ToTable("secgroup");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Active = true,
+                            Description = "Everyone",
+                            Name = "Everyone"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Active = true,
+                            Description = "System Administrators",
+                            Name = "Administrators"
+                        });
                 });
 
             modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.GroupPermission", b =>
@@ -57,6 +73,23 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.SqLite.Migrations
                     b.HasIndex("PermissionId");
 
                     b.ToTable("secgrouppermission");
+
+                    b.HasData(
+                        new
+                        {
+                            GroupId = 1L,
+                            PermissionId = 1L
+                        },
+                        new
+                        {
+                            GroupId = 2L,
+                            PermissionId = 1L
+                        },
+                        new
+                        {
+                            GroupId = 2L,
+                            PermissionId = 2L
+                        });
                 });
 
             modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.GroupUser", b =>
@@ -72,6 +105,23 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.SqLite.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("secgroupuser");
+
+                    b.HasData(
+                        new
+                        {
+                            GroupId = 1L,
+                            UserId = 1L
+                        },
+                        new
+                        {
+                            GroupId = 1L,
+                            UserId = 2L
+                        },
+                        new
+                        {
+                            GroupId = 2L,
+                            UserId = 1L
+                        });
                 });
 
             modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.Permission", b =>
@@ -106,6 +156,24 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.SqLite.Migrations
                     b.HasIndex("PermissionCategoryId");
 
                     b.ToTable("secpermission");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Active = false,
+                            Description = "The user can Login in the System",
+                            Name = "Users.Login",
+                            PermissionCategoryId = 1L
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Active = false,
+                            Description = "The user can add other users to the System",
+                            Name = "Users.AddUser",
+                            PermissionCategoryId = 1L
+                        });
                 });
 
             modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.PermissionCategory", b =>
@@ -135,6 +203,22 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.SqLite.Migrations
                         .IsUnique();
 
                     b.ToTable("secpermissioncategory");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Active = false,
+                            Description = "User Management Permissions",
+                            Name = "Users"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Active = false,
+                            Description = "System Management Permissions",
+                            Name = "System"
+                        });
                 });
 
             modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.User", b =>
@@ -182,6 +266,28 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.SqLite.Migrations
                     b.HasIndex("UserName");
 
                     b.ToTable("secuser");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Active = true,
+                            FirstName = "System",
+                            LastName = "Administrator",
+                            Password = "$2y$10$nLgfDdhTjYdUH6wbEctoLe0Ua6yjzx8YCksWZ/aaVGLpAb0hmtddG",
+                            Recover = false,
+                            UserName = "administrator"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Active = true,
+                            FirstName = "Test",
+                            LastName = "01",
+                            Password = "$2y$10$qrGKsfUDysr7fR18ZWlkxOYWMg6D.Of3CeCUzZLGC27xS4VV4AzqW",
+                            Recover = false,
+                            UserName = "test01"
+                        });
                 });
 
             modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.GroupPermission", b =>
