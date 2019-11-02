@@ -1,4 +1,5 @@
-﻿using Mangau.WillNeedUmbrella.Entities;
+﻿using Mangau.WillNeedUmbrella.Configuration;
+using Mangau.WillNeedUmbrella.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,8 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
 {
     public abstract class WnuContextBase : DbContext
     {
+        protected AppSettings AppSettings { get; private set; }
+
         public DbSet<User> Users { get; set; }
 
         public DbSet<Group> Groups { get; set; }
@@ -19,6 +22,11 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
         public DbSet<Permission> Permissions { get; set; }
 
         public DbSet<GroupPermission> GroupsPermissions { get; set; }
+
+        public WnuContextBase(AppSettings appSettings): base()
+        {
+            AppSettings = appSettings;
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

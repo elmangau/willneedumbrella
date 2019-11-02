@@ -1,11 +1,16 @@
 using Mangau.WillNeedUmbrella.Configuration;
+using Mangau.WillNeedUmbrella.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Mangau.WillNeedUmbrella.Web
 {
@@ -15,9 +20,9 @@ namespace Mangau.WillNeedUmbrella.Web
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddXmlFile("appsettings.config", optional: false, reloadOnChange: true)
-                .AddXmlFile("appsettings.mocks.config", optional: true, reloadOnChange: true)
-                .AddXmlFile($"appsettings.{env.EnvironmentName}.config", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.mocks.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
@@ -25,15 +30,12 @@ namespace Mangau.WillNeedUmbrella.Web
 
         public IConfiguration Configuration { get; }
 
-        private void SetSettings(IWebHostEnvironment env)
-        {
-
-        }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAppSettings(Configuration);
+            var appSettings = services.AddAppSettings(Configuration);
+
+            services.AddScoped<WnuContextBase, WnuContext>();
 
             services.AddControllersWithViews();
 
@@ -42,6 +44,28 @@ namespace Mangau.WillNeedUmbrella.Web
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            // Configure JWT
+            var key = Encoding.ASCII.GetBytes(appSettings.Authentication.JwtSecretKey);
+            services.AddAuthentication(x =>
+                {
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(x =>
+                {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
+
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +87,9 @@ namespace Mangau.WillNeedUmbrella.Web
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

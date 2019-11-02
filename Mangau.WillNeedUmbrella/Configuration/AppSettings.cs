@@ -7,5 +7,7 @@ namespace Mangau.WillNeedUmbrella.Configuration
     public class AppSettings
     {
         public ConnectionStringsSettings ConnectionStrings { get; set; }
+
+        public AuthenticationSettings Authentication { get; set; }
     }
 }
