@@ -20,6 +20,8 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="NLog.Config" Version="4.6.7" />
+        <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -42,6 +44,12 @@
 
     <ItemGroup>
         <TypeScriptCompile Include="ClientApp\src\App.tsx" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="NLog.config">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
