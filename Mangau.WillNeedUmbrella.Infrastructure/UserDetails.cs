@@ -1,4 +1,5 @@
 ﻿using Mangau.WillNeedUmbrella.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,7 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
 
         public string LastName { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Token { get; set; }
 
         private List<string> _permisions = new List<string>();

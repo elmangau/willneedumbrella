@@ -35,7 +35,7 @@ namespace Mangau.WillNeedUmbrella.Web
         {
             var appSettings = services.AddAppSettings(Configuration);
 
-            services.AddScoped<WnuContextBase, WnuContext>();
+            services.AddScoped<WnuContextBase, WnuContext>((sp) => new WnuContext(appSettings));
 
             services.AddControllersWithViews();
 
@@ -66,6 +66,11 @@ namespace Mangau.WillNeedUmbrella.Web
                 });
 
             services.AddScoped<IUserService, UserService>();
+
+            using (var dbctx = new WnuContext(appSettings))
+            {
+                dbctx.Database.Migrate();
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

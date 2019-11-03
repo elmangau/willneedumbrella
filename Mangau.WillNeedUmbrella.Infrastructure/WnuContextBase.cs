@@ -23,6 +23,8 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
 
         public DbSet<GroupPermission> GroupsPermissions { get; set; }
 
+        public DbSet<SessionToken> SessionTokens { get; set; }
+
         public WnuContextBase(AppSettings appSettings): base()
         {
             AppSettings = appSettings;
@@ -130,6 +132,12 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
                     new GroupPermission { GroupId = 2, PermissionId = 1 },
                     new GroupPermission { GroupId = 2, PermissionId = 2 }
                 );
+
+            var sessionTokenMB = modelBuilder.Entity<SessionToken>();
+            sessionTokenMB
+                .HasOne(st => st.User)
+                .WithMany(u => u.SessionTokens)
+                .HasForeignKey(u => u.UserId);
         }
     }
 }

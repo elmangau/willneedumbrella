@@ -36,5 +36,7 @@ namespace Mangau.WillNeedUmbrella.Entities
         public string LastName { get; set; }
 
         public virtual IList<GroupUser> GroupsUsers { get; set; }
+
+        public virtual IList<SessionToken> SessionTokens { get; set; }
     }
 }

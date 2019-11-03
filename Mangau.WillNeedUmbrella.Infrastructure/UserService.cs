@@ -8,15 +8,18 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Mangau.WillNeedUmbrella.Infrastructure
 {
     public interface IUserService
     {
-        public Task<UserDetails> Authenticate(string username, string password);
+        public Task<UserDetails> Authenticate(string username, string password, CancellationToken cancellationToken = default);
 
-        public Task<IEnumerable<UserDetails>> GetAll();
+        public Task<bool> Logout(long userId, CancellationToken cancellationToken = default);
+
+        public Task<IEnumerable<UserDetails>> GetAll(CancellationToken cancellationToken = default);
     }
 
     public class UserService : IUserService
@@ -30,17 +33,17 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
             _wnuContext = wnuContext;
         }
 
-        public async Task<UserDetails> Authenticate(string username, string password)
+        public async Task<UserDetails> Authenticate(string username, string password, CancellationToken cancellationToken = default)
         {
             var bpassword = BCrypt.Net.BCrypt.HashPassword(password, 10);
 
             var user = await _wnuContext.Users
-                .Where(u => u.UserName == username && u.Active)
                 .Include(u => u.GroupsUsers)
                 .ThenInclude(gu => gu.Group)
                 .ThenInclude(g => g.GroupsPermissions)
                 .ThenInclude(gp => gp.Permission)
-                .FirstOrDefaultAsync();
+                .Where(u => u.UserName == username && u.Active)
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (user == null)
             {
@@ -51,32 +54,54 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
                 return null;
             }
 
-            var claims = new List<Claim>() { new Claim(ClaimTypes.Name, user.Id.ToString()) };
             var res = new UserDetails(user, true);
-            foreach(var p in res.Permissions)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, p));
-            }
+            var claims = new List<Claim>() { new Claim(ClaimTypes.Name, user.Id.ToString()) };
+            claims.AddRange(res.Permissions.Select(p => new Claim(ClaimTypes.Role, p)));
 
+            var expires = DateTime.UtcNow.AddDays(7);
             var tokenHnd = new JwtSecurityTokenHandler();
             var jwtKey = Encoding.ASCII.GetBytes(_appSettings.Authentication.JwtSecretKey);
             var tokenDesc = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = expires,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(jwtKey), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHnd.CreateToken(tokenDesc);
             res.Token = tokenHnd.WriteToken(token);
 
+            _wnuContext.SessionTokens.RemoveRange(await _wnuContext.SessionTokens.Where(st => st.UserId == user.Id).ToArrayAsync());
+            await _wnuContext.SessionTokens.AddAsync(new SessionToken { UserId = user.Id, LoggedAt = DateTime.UtcNow, Expires = expires }, cancellationToken);
+            await _wnuContext.SaveChangesAsync(cancellationToken);
+
             return res;
         }
 
-        public async Task<IEnumerable<UserDetails>> GetAll()
+        public async Task<bool> Logout(long userId, CancellationToken cancellationToken = default)
         {
-            var users = await _wnuContext.Users.Where(u => u.Active).ToListAsync();
+            _wnuContext.SessionTokens.RemoveRange(await _wnuContext.SessionTokens.Where(st => st.UserId == userId).ToArrayAsync());
+            await _wnuContext.SaveChangesAsync(cancellationToken);
+
+            return true;
+        }
+
+        public async Task<IEnumerable<UserDetails>> GetAll(CancellationToken cancellationToken = default)
+        {
+            var users = await _wnuContext.Users.Where(u => u.Active).ToListAsync(cancellationToken);
 
             return users.Select(u => new UserDetails(u));
+        }
+
+        public async Task<IEnumerable<User>> GetLoggedIn(CancellationToken cancellationToken)
+        {
+            var now = DateTime.UtcNow;
+            var res = await _wnuContext.SessionTokens
+                .Include(st => st.User)
+                .Where(st => st.UserId > 0 && st.User.Active && st.Expires > now)
+                .Select(st => st.User)
+                .ToListAsync(cancellationToken);
+
+            return res;
         }
     }
 }

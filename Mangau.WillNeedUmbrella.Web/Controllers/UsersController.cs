@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Mangau.WillNeedUmbrella.Infrastructure;
 using Mangau.WillNeedUmbrella.Web.Models;
@@ -26,9 +27,9 @@ namespace Mangau.WillNeedUmbrella.Web.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody] UserAuthentication model)
+        public async Task<IActionResult> Authenticate([FromBody] UserAuthentication model, CancellationToken cancellationToken)
         {
-            var user = await _userService.Authenticate(model.Username, model.Password);
+            var user = await _userService.Authenticate(model.Username, model.Password, cancellationToken);
 
             if (user == null)
             {
@@ -38,10 +39,23 @@ namespace Mangau.WillNeedUmbrella.Web.Controllers
             return Ok(user);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpDelete]
+        public async Task<IActionResult> Logout(CancellationToken cancellationToken)
         {
-            return Ok(await _userService.GetAll());
+            if (Int64.TryParse(User.Identity.Name, out long userId))
+            {
+                await _userService.Logout(userId, cancellationToken);
+
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+        {
+            return Ok(await _userService.GetAll(cancellationToken));
         }
     }
 }

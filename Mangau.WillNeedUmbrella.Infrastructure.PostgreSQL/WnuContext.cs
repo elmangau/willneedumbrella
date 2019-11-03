@@ -5,8 +5,14 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
 {
     public class WnuContext : WnuContextBase
     {
-        public WnuContext(AppSettings appSettings) :
-            base(appSettings)
+        public WnuContext()
+            : this(new AppSettings())
+        {
+
+        }
+
+        public WnuContext(AppSettings appSettings)
+            : base(appSettings)
         {
         }
 
