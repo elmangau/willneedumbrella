@@ -1,5 +1,6 @@
 using Mangau.WillNeedUmbrella.Configuration;
 using Mangau.WillNeedUmbrella.Infrastructure;
+using Mangau.WillNeedUmbrella.Web.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -66,6 +67,8 @@ namespace Mangau.WillNeedUmbrella.Web
                 });
 
             services.AddScoped<IUserService, UserService>();
+
+            services.AddHostedService<LogoutExpiredBackgroundService>();
 
             using (var dbctx = new WnuContext(appSettings))
             {

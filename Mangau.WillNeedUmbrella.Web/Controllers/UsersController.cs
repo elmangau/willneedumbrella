@@ -16,12 +16,12 @@ namespace Mangau.WillNeedUmbrella.Web.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly ILogger<UsersController> _logger;
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         private IUserService _userService;
 
-        public UsersController(ILogger<UsersController> logger, IUserService userService)
+        public UsersController(IUserService userService)
         {
-            _logger = logger;
             _userService = userService;
         }
 
@@ -33,6 +33,7 @@ namespace Mangau.WillNeedUmbrella.Web.Controllers
 
             if (user == null)
             {
+                logger.Error($"Username '{model.Username}' or password is incorrect");
                 return BadRequest(new { message = "Username or password is incorrect" });
             }
 
@@ -42,9 +43,9 @@ namespace Mangau.WillNeedUmbrella.Web.Controllers
         [HttpDelete]
         public async Task<IActionResult> Logout(CancellationToken cancellationToken)
         {
-            if (Int64.TryParse(User.Identity.Name, out long userId))
+            if (Int64.TryParse(User.Identity.Name, out long sessionTokenId))
             {
-                await _userService.Logout(userId, cancellationToken);
+                await _userService.Logout(sessionTokenId, cancellationToken);
 
                 return Ok();
             }

@@ -20,6 +20,10 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
         public Task<bool> Logout(long userId, CancellationToken cancellationToken = default);
 
         public Task<IEnumerable<UserDetails>> GetAll(CancellationToken cancellationToken = default);
+
+        public Task<IEnumerable<User>> GetLoggedIn(CancellationToken cancellationToken);
+
+        public Task<bool> LogoutExpired(CancellationToken cancellationToken);
     }
 
     public class UserService : IUserService
@@ -54,11 +58,19 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
                 return null;
             }
 
+            var expires = DateTime.UtcNow.AddDays(7);
+
+            var st = await _wnuContext.SessionTokens.AddAsync(new SessionToken { UserId = user.Id, LoggedAt = DateTime.UtcNow, Expires = expires }, cancellationToken);
+            await _wnuContext.SaveChangesAsync(cancellationToken);
+
             var res = new UserDetails(user, true);
-            var claims = new List<Claim>() { new Claim(ClaimTypes.Name, user.Id.ToString()) };
+            var claims = new List<Claim>() 
+            {
+                new Claim(ClaimTypes.Name, st.Entity.Id.ToString()),
+                new Claim(ClaimTypes.Surname, user.Id.ToString()),
+            };
             claims.AddRange(res.Permissions.Select(p => new Claim(ClaimTypes.Role, p)));
 
-            var expires = DateTime.UtcNow.AddDays(7);
             var tokenHnd = new JwtSecurityTokenHandler();
             var jwtKey = Encoding.ASCII.GetBytes(_appSettings.Authentication.JwtSecretKey);
             var tokenDesc = new SecurityTokenDescriptor
@@ -70,16 +82,12 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
             var token = tokenHnd.CreateToken(tokenDesc);
             res.Token = tokenHnd.WriteToken(token);
 
-            _wnuContext.SessionTokens.RemoveRange(await _wnuContext.SessionTokens.Where(st => st.UserId == user.Id).ToArrayAsync());
-            await _wnuContext.SessionTokens.AddAsync(new SessionToken { UserId = user.Id, LoggedAt = DateTime.UtcNow, Expires = expires }, cancellationToken);
-            await _wnuContext.SaveChangesAsync(cancellationToken);
-
             return res;
         }
 
-        public async Task<bool> Logout(long userId, CancellationToken cancellationToken = default)
+        public async Task<bool> Logout(long sessionTokenId, CancellationToken cancellationToken = default)
         {
-            _wnuContext.SessionTokens.RemoveRange(await _wnuContext.SessionTokens.Where(st => st.UserId == userId).ToArrayAsync());
+            _wnuContext.SessionTokens.RemoveRange(await _wnuContext.SessionTokens.Where(st => st.Id == sessionTokenId).ToArrayAsync());
             await _wnuContext.SaveChangesAsync(cancellationToken);
 
             return true;
@@ -102,6 +110,22 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
                 .ToListAsync(cancellationToken);
 
             return res;
+        }
+
+        public async Task<bool> LogoutExpired(CancellationToken cancellationToken)
+        {
+            var now = DateTime.UtcNow;
+            var res = await _wnuContext.SessionTokens
+                .Where(st => st.Expires <= now)
+                .ToListAsync(cancellationToken);
+
+            if (res.Any())
+            {
+                _wnuContext.SessionTokens.RemoveRange(res);
+                await _wnuContext.SaveChangesAsync(cancellationToken);
+            }
+
+            return true;
         }
     }
 }

@@ -9,5 +9,7 @@ namespace Mangau.WillNeedUmbrella.Configuration
         public ConnectionStringsSettings ConnectionStrings { get; set; }
 
         public AuthenticationSettings Authentication { get; set; }
+
+        public int LogoutExpiredInterval { get; set; }
     }
 }
