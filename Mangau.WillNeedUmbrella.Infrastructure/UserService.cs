@@ -15,7 +15,7 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
 {
     public interface IUserService
     {
-        public Task<UserDetails> Authenticate(string username, string password, CancellationToken cancellationToken = default);
+        public Task<UserDetails> Login(string username, string password, CancellationToken cancellationToken = default);
 
         public Task<bool> Logout(long userId, CancellationToken cancellationToken = default);
 
@@ -37,7 +37,7 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
             _wnuContext = wnuContext;
         }
 
-        public async Task<UserDetails> Authenticate(string username, string password, CancellationToken cancellationToken = default)
+        public async Task<UserDetails> Login(string username, string password, CancellationToken cancellationToken = default)
         {
             var bpassword = BCrypt.Net.BCrypt.HashPassword(password, 10);
 

@@ -26,21 +26,21 @@ namespace Mangau.WillNeedUmbrella.Web.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody] UserAuthentication model, CancellationToken cancellationToken)
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] UserAuthentication ua, CancellationToken cancellationToken)
         {
-            var user = await _userService.Authenticate(model.Username, model.Password, cancellationToken);
+            var user = await _userService.Login(ua.Username, ua.Password, cancellationToken);
 
             if (user == null)
             {
-                logger.Error($"Username '{model.Username}' or password is incorrect");
+                logger.Error($"Username '{ua.Username}' or password is incorrect");
                 return BadRequest(new { message = "Username or password is incorrect" });
             }
 
             return Ok(user);
         }
 
-        [HttpDelete]
+        [HttpDelete("logout")]
         public async Task<IActionResult> Logout(CancellationToken cancellationToken)
         {
             if (Int64.TryParse(User.Identity.Name, out long sessionTokenId))
