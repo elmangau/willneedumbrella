@@ -37,8 +37,7 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
             var totalCount = await _wnuContext.Cities.CountAsync(cancellationToken);
             var content = await _wnuContext.Cities
                 .OrderBy(c => c.Name)
-                .Skip(pageRequest.PageIndex)
-                .Take(pageRequest.Size)
+                .Pagination(pageRequest)
                 .ToListAsync(cancellationToken);
 
             return new PageResponse<City>(pageRequest, totalCount, content);

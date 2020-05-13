@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Mangau.WillNeedUmbrella.Infrastructure
@@ -49,6 +50,7 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
             _request = request;
 
             Content = content;
+            HasContent = content.Any();
             TotalCount = totalCount;
             PageCount = (TotalCount / request.Size) + Math.Min(TotalCount % request.Size, 1);
 
@@ -64,6 +66,8 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
         public int TotalCount { get; }
 
         public IEnumerable<TEntity> Content { get; }
+
+        public bool HasContent { get; }
 
         public bool HasNext { get; }
 

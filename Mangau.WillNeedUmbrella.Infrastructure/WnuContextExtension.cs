@@ -51,5 +51,17 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
                 .Skip(pageRequest.PageIndex)
                 .Take(pageRequest.Size);
         }
+
+        public static IEnumerable<TEntity> Distinct<TEntity>(this IEnumerable<TEntity> query, Func<TEntity, object> expr)
+        {
+            return query
+                .Distinct(new GenericComparer<TEntity>(expr));
+        }
+
+        public static IQueryable<TEntity> Distinct<TEntity>(this IQueryable<TEntity> query, Func<TEntity, object> expr)
+        {
+            return query
+                .Distinct(new GenericComparer<TEntity>(expr));
+        }
     }
 }

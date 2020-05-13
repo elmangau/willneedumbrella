@@ -1,5 +1,6 @@
 using Mangau.WillNeedUmbrella.Configuration;
 using Mangau.WillNeedUmbrella.Infrastructure;
+using Mangau.WillNeedUmbrella.Web.Clients;
 using Mangau.WillNeedUmbrella.Web.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -38,6 +39,8 @@ namespace Mangau.WillNeedUmbrella.Web
 
             services.AddScoped<WnuContextBase, WnuContext>((sp) => new WnuContext(appSettings));
 
+            services.RegisterClients(appSettings);
+
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory
@@ -68,8 +71,10 @@ namespace Mangau.WillNeedUmbrella.Web
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICityService, CityService>();
+            services.AddScoped<IUserCityService, UserCityService>();
 
             services.AddHostedService<LogoutExpiredBackgroundService>();
+            services.AddHostedService<WeatherUpdateBackgroundService>();
 
             //using (var dbctx = new WnuContext(appSettings))
             //{
