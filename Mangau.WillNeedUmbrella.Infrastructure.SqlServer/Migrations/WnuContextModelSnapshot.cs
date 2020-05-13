@@ -296,6 +296,12 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.SqlServer.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
+                    b.Property<string>("Email")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128)
+                        .HasDefaultValue("");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(128)")
@@ -352,6 +358,21 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.SqlServer.Migrations
                             Recover = false,
                             UserName = "test01"
                         });
+                });
+
+            modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.UserCity", b =>
+                {
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "CityId");
+
+                    b.HasIndex("CityId");
+
+                    b.ToTable("wnuusercity");
                 });
 
             modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.City", b =>
@@ -419,6 +440,21 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.SqlServer.Migrations
                 {
                     b.HasOne("Mangau.WillNeedUmbrella.Entities.User", "User")
                         .WithMany("SessionTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.UserCity", b =>
+                {
+                    b.HasOne("Mangau.WillNeedUmbrella.Entities.City", "City")
+                        .WithMany("UsersCities")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Mangau.WillNeedUmbrella.Entities.User", "User")
+                        .WithMany("UsersCities")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

@@ -35,8 +35,13 @@ namespace Mangau.WillNeedUmbrella.Entities
         [MaxLength(128)]
         public string LastName { get; set; }
 
+        [MaxLength(128)]
+        public string Email { get; set; }
+
         public virtual IList<GroupUser> GroupsUsers { get; set; }
 
         public virtual IList<SessionToken> SessionTokens { get; set; }
+
+        public virtual IList<UserCity> UsersCities { get; set; }
     }
 }

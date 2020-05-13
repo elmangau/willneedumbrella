@@ -35,5 +35,7 @@ namespace Mangau.WillNeedUmbrella.Entities
 
         [Required]
         public CityCoords Coord { get; set; }
+
+        public virtual IList<UserCity> UsersCities { get; set; }
     }
 }

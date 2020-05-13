@@ -27,6 +27,8 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
 
         public DbSet<City> Cities { get; set; }
 
+        public DbSet<UserCity> UsersCities { get; set; }
+
         public WnuContextBase(AppSettings appSettings): base()
         {
             AppSettings = appSettings;
@@ -38,6 +40,9 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
             userMB
                 .Property(u => u.Active)
                 .HasDefaultValue(false);
+            userMB
+                .Property(u => u.Email)
+                .HasDefaultValue(string.Empty);
             userMB
                 .Property(u => u.Recover)
                 .HasDefaultValue(false);
@@ -156,6 +161,18 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
                 .IsUnique(false);
             cityMB
                 .OwnsOne(c => c.Coord);
+
+            var usersCitiesMB = modelBuilder.Entity<UserCity>();
+            usersCitiesMB
+                .HasKey(uc => new { uc.UserId, uc.CityId });
+            usersCitiesMB
+                .HasOne(uc => uc.User)
+                .WithMany(u => u.UsersCities)
+                .HasForeignKey(u => u.UserId);
+            usersCitiesMB
+                .HasOne(uc => uc.City)
+                .WithMany(c => c.UsersCities)
+                .HasForeignKey(c => c.CityId);
         }
     }
 }
