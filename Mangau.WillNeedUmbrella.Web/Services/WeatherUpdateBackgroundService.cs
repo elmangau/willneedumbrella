@@ -146,6 +146,8 @@ namespace Mangau.WillNeedUmbrella.Web.Services
                 {
                     logger.Error(ex, $"Error updating Weather forecast.");
                 }
+
+                await Task.Delay(interval, cancellationToken);
             }
 
             logger.Info("Weather Update Sessions Background Service is stopping.");
