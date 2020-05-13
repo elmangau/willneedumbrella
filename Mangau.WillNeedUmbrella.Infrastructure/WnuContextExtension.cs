@@ -30,12 +30,26 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
         {
             if (!context.Cities.Any())
             {
-                var cities = JsonConvert.DeserializeObject<List<City>>(File.ReadAllText("seed" + Path.DirectorySeparatorChar + "city.list.json"));
-                    //.Where(c => c.Country.Length <= 2);
+                var cities = JsonConvert.DeserializeObject<List<City>>(File.ReadAllText("seed" + Path.DirectorySeparatorChar + "city.list.json"))
+                    .Where(c => c.Country.Length <= 2 && c.Name.Length >= 2);
 
                 context.Cities.AddRange(cities);
                 context.SaveChanges();
             }
+        }
+
+        public static IEnumerable<TEntity> Pagination<TEntity>(this IEnumerable<TEntity> query, PageRequest pageRequest)
+        {
+            return query
+                .Skip(pageRequest.PageIndex)
+                .Take(pageRequest.Size);
+        }
+
+        public static IQueryable<TEntity> Pagination<TEntity>(this IQueryable<TEntity> query, PageRequest pageRequest)
+        {
+            return query
+                .Skip(pageRequest.PageIndex)
+                .Take(pageRequest.Size);
         }
     }
 }

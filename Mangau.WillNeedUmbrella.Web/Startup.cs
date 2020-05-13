@@ -67,6 +67,7 @@ namespace Mangau.WillNeedUmbrella.Web
                 });
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICityService, CityService>();
 
             services.AddHostedService<LogoutExpiredBackgroundService>();
 

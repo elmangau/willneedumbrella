@@ -15,11 +15,11 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
 {
     public interface IUserService
     {
-        public Task<UserDetails> Login(string username, string password, CancellationToken cancellationToken = default);
+        public Task<UserDetails> Login(string username, string password, CancellationToken cancellationToken);
 
-        public Task<bool> Logout(long userId, CancellationToken cancellationToken = default);
+        public Task<bool> Logout(long userId, CancellationToken cancellationToken);
 
-        public Task<IEnumerable<UserDetails>> GetAll(CancellationToken cancellationToken = default);
+        public Task<IEnumerable<UserDetails>> GetAll(CancellationToken cancellationToken);
 
         public Task<IEnumerable<User>> GetLoggedIn(CancellationToken cancellationToken);
 
@@ -37,7 +37,7 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
             _wnuContext = wnuContext;
         }
 
-        public async Task<UserDetails> Login(string username, string password, CancellationToken cancellationToken = default)
+        public async Task<UserDetails> Login(string username, string password, CancellationToken cancellationToken)
         {
             var bpassword = BCrypt.Net.BCrypt.HashPassword(password, 10);
 
@@ -85,7 +85,7 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
             return res;
         }
 
-        public async Task<bool> Logout(long sessionTokenId, CancellationToken cancellationToken = default)
+        public async Task<bool> Logout(long sessionTokenId, CancellationToken cancellationToken)
         {
             _wnuContext.SessionTokens.RemoveRange(await _wnuContext.SessionTokens.Where(st => st.Id == sessionTokenId).ToArrayAsync());
             await _wnuContext.SaveChangesAsync(cancellationToken);
@@ -93,7 +93,7 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
             return true;
         }
 
-        public async Task<IEnumerable<UserDetails>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<UserDetails>> GetAll(CancellationToken cancellationToken)
         {
             var users = await _wnuContext.Users.Where(u => u.Active).ToListAsync(cancellationToken);
 
