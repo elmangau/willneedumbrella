@@ -25,6 +25,8 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
 
         public DbSet<SessionToken> SessionTokens { get; set; }
 
+        public DbSet<City> Cities { get; set; }
+
         public WnuContextBase(AppSettings appSettings): base()
         {
             AppSettings = appSettings;
@@ -138,6 +140,22 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
                 .HasOne(st => st.User)
                 .WithMany(u => u.SessionTokens)
                 .HasForeignKey(u => u.UserId);
+
+            var cityMB = modelBuilder.Entity<City>();
+            cityMB
+                .HasIndex(c => new { c.Country, c.State, c.Name })
+                .IsUnique(false);
+            cityMB
+                .HasIndex(c => new { c.Country, c.Name })
+                .IsUnique(false);
+            cityMB
+                .HasIndex(c => c.Country)
+                .IsUnique(false);
+            cityMB
+                .HasIndex(c => c.Name)
+                .IsUnique(false);
+            cityMB
+                .OwnsOne(c => c.Coord);
         }
     }
 }

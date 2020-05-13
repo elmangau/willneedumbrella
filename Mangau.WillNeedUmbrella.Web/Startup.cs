@@ -70,10 +70,10 @@ namespace Mangau.WillNeedUmbrella.Web
 
             services.AddHostedService<LogoutExpiredBackgroundService>();
 
-            using (var dbctx = new WnuContext(appSettings))
-            {
-                dbctx.Database.Migrate();
-            }
+            //using (var dbctx = new WnuContext(appSettings))
+            //{
+            //    dbctx.Database.Migrate();
+            //}
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -105,6 +105,15 @@ namespace Mangau.WillNeedUmbrella.Web
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                if (!serviceScope.ServiceProvider.GetService<WnuContextBase>().AllMigrationsApplied())
+                {
+                    serviceScope.ServiceProvider.GetService<WnuContextBase>().Database.Migrate();
+                    serviceScope.ServiceProvider.GetService<WnuContextBase>().EnsureSeeded();
+                }
+            }
 
             app.UseSpa(spa =>
             {

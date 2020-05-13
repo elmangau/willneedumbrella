@@ -23,7 +23,7 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseSqlite("Data Source=WillNeedUmbrella.db"); // TODO: Load from configuration/settings file
+            options.UseSqlite(AppSettings?.ConnectionStrings?.SqLite ?? "_");
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseMySql("database=willneedumbrella;server=localhost;port=3306;user id=willneedumbrella;password=Prueba#8"); // TODO: Load from configuration/settings file
+            options.UseMySql(AppSettings?.ConnectionStrings?.MySql ?? "database=;server=;port=3306;user id=;password=");
         }
     }
 }

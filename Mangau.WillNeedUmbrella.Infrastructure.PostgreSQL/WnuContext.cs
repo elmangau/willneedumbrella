@@ -23,7 +23,7 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseNpgsql("PostgreSQL"); // TODO: Load from configuration/settings file
+            options.UseNpgsql(AppSettings?.ConnectionStrings?.PostgreSQL ?? "_");
         }
     }
 }

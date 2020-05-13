@@ -23,7 +23,7 @@ namespace Mangau.WillNeedUmbrella.Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseSqlServer("SqlServer"); // TODO: Load from configuration/settings file
+            options.UseSqlServer(AppSettings?.ConnectionStrings?.SqlServer ?? "_");
         }
     }
 }

@@ -16,6 +16,39 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.SqLite.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.0.0");
 
+            modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.City", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(2);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Country");
+
+                    b.HasIndex("Name");
+
+                    b.HasIndex("Country", "Name");
+
+                    b.HasIndex("Country", "State", "Name");
+
+                    b.ToTable("wnucity");
+                });
+
             modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.Group", b =>
                 {
                     b.Property<long>("Id")
@@ -310,6 +343,28 @@ namespace Mangau.WillNeedUmbrella.Infrastructure.SqLite.Migrations
                             Password = "$2y$10$qrGKsfUDysr7fR18ZWlkxOYWMg6D.Of3CeCUzZLGC27xS4VV4AzqW",
                             Recover = false,
                             UserName = "test01"
+                        });
+                });
+
+            modelBuilder.Entity("Mangau.WillNeedUmbrella.Entities.City", b =>
+                {
+                    b.OwnsOne("Mangau.WillNeedUmbrella.Entities.CityCoords", "Coord", b1 =>
+                        {
+                            b1.Property<int>("CityId")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<float>("Lat")
+                                .HasColumnType("REAL");
+
+                            b1.Property<float>("Lon")
+                                .HasColumnType("REAL");
+
+                            b1.HasKey("CityId");
+
+                            b1.ToTable("wnucity");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CityId");
                         });
                 });
 
